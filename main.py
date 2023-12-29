@@ -6,8 +6,7 @@ from streamlit_chat import message
 model = 'gpt-3.5-turbo'
 
 # 실제 API 키를 입력하세요
-api_key = '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'
-#api_key = st.secrets["OPENAI_API_KEY"]
+api_key = st.secrets["OPENAI_API_KEY"]
 openai.api_key = api_key
 
 if 'messages' not in st.session_state:
