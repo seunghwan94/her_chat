@@ -1,4 +1,4 @@
-import openai
+from openai import OpenAI
 import streamlit as st
 from streamlit_chat import message
 
@@ -7,7 +7,9 @@ model = 'gpt-3.5-turbo'
 
 # 실제 API 키를 입력하세요
 api_key = st.secrets["OPENAI_API_KEY"]
-openai.api_key = api_key
+client = OpenAI(
+  api_key=api_key  # this is also the default, it can be omitted
+)
 
 if 'messages' not in st.session_state:
     st.session_state['messages'] = []
@@ -35,7 +37,7 @@ def add_user_message(content):
 def add_bot_response():
     try:
         print(st.session_state.messages)
-        completion = openai.ChatCompletion.create(
+        completion = client.chat.completions.create(
             model=model,
             messages=st.session_state.messages,
             temperature=0.3,
@@ -44,7 +46,7 @@ def add_bot_response():
             presence_penalty=0
         )
 
-        response = completion.choices[0].message['content']
+        response = completion.choices[0].message.content
         st.session_state.messages.append({"role": "assistant", "content": response})
         print(st.session_state.messages)
         return response
